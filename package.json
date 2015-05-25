@@ -25,9 +25,7 @@
     },
     "homepage": "https://github.com/mccormicka/string-argv",
     "readmeFilename": "README.md",
-    "dependencies": {
-        "bunyan": "~0.22.1"
-    },
+    "dependencies": {},
     "devDependencies": {
         "grunt": "0.4.1",
         "jasmine-node": "https://github.com/mccormicka/jasmine-node/archive/exclusive-tests.tar.gz",
