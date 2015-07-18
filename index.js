@@ -4,10 +4,15 @@ module.exports.parseArgsStringToArgv = parseArgsStringToArgv;
 
 function parseArgsStringToArgv(value, env, file) {
     //[^\s'"] Match if not a space ' or "
-    //+|['"] or Match ' or "
-    //([^'"]*) Match anything that is not ' or "
-    //['"] Close match if ' or "
-    var myRegexp = /[^\s'"]+|['"]([^'"]*)['"]/gi;
+
+    //+|['] or Match '
+    //([^']*) Match anything that is not '
+    //['] Close match if '
+
+    //+|["] or Match "
+    //([^"]*) Match anything that is not "
+    //["] Close match if "
+    var myRegexp = /[^\s'"]+|[']([^']*?)[']|["]([^"]*?)["]/gi;
     var myString = value;
     var myArray = [
     ];
@@ -24,7 +29,7 @@ function parseArgsStringToArgv(value, env, file) {
         if (match !== null) {
             //Index 1 in the array is the captured group if it exists
             //Index 0 is the matched text, which we use if no captured group exists
-            myArray.push(match[1] ? match[1] : match[0]);
+            myArray.push(match[2] ? match[2] : (match[1]?match[1]:match[0]));
         }
     } while (match !== null);
 
