@@ -93,5 +93,19 @@ describe('SHOULD', function () {
             done();
         });
 
+        it('a complex key value with quotes', function (done) {
+            var results = util.parseArgsStringToArgv('--name=\'Phil Taylor\' --title="Peter\'s Friends"');
+            expect(results.length).toBe(2);
+            expect(results[0]).toEqual('--name=\'Phil Taylor\'');
+            expect(results[1]).toEqual('--title="Peter\'s Friends"');
+            done();
+        });
+
+        it('a complex key value with nested quotes', function (done) {
+            var results = util.parseArgsStringToArgv('--name=\'Phil "The Power" Taylor\'');
+            expect(results.length).toBe(1);
+            expect(results[0]).toEqual('--name=\'Phil "The Power" Taylor\'');
+            done();
+        });
     });
 });

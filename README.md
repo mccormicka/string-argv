@@ -4,15 +4,18 @@ string-argv parses a string into an argument array to mimic process.argv.
 This is useful when testing Command Line Utilities that you want to pass arguments to and is the opposite of what the other argv utilities do.
 
 #Installation
+
 ```
 npm install string-argv --save
 ```
+
 #Usage
-```
-var util = require('../index');
-var args = util.parseArgsStringToArgv(
-    '-testing test -valid=true --quotes "test quotes"', 
-    'node', 
+
+```js
+var stringArgv = require('string-argv');
+var args = stringArgv.parseArgsStringToArgv(
+    '-testing test -valid=true --quotes "test quotes" "nested \'quotes\'" --key="some value" --title="Peter\'s Friends"',
+    'node',
     'testing.js'
 );
 
@@ -25,7 +28,10 @@ console.log(args);
   'test',
   '-valid=true',
   '--quotes',
-  'test quotes' ]
+  'test quotes',
+  'nested \'quotes\'',
+  '--key="some value"',
+  '--title="Peter\'s Friends"' ]
   **/
 ```
 
