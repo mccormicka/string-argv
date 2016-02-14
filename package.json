@@ -1,36 +1,33 @@
 {
-    "name": "string-argv",
-    "description": "string-argv parses a string into an argument array to mimic process.argv. This is useful when testing Command Line Utilities that you want to pass arguments to.",
-    "version": "0.0.1",
-    "author": {
-        "name": "Anthony McCormick",
-        "email": "anthony.mccormick AT gmail.com"
-    },
-    "keywords": [
-        "logger"
-    ],
-    "scripts": {
-        "test": "jasmine-node test/ --verbose --color --captureExceptions"
-    },
-    "main": "index",
-    "engines": {
-        "node": ">=0.6.19"
-    },
-    "bugs": {
-        "url": "https://github.com/mccormicka/string-argv/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/mccormicka/string-argv"
-    },
-    "homepage": "https://github.com/mccormicka/string-argv",
-    "readmeFilename": "README.md",
-    "dependencies": {},
-    "devDependencies": {
-        "grunt": "0.4.1",
-        "jasmine-node": "https://github.com/mccormicka/jasmine-node/archive/exclusive-tests.tar.gz",
-        "grunt-contrib-watch": "0.3.1",
-        "grunt-contrib-jshint": "0.4.3",
-        "grunt-jasmine-node": "~0.1.0"
-    }
+  "name": "string-argv",
+  "description": "string-argv parses a string into an argument array to mimic process.argv. This is useful when testing Command Line Utilities that you want to pass arguments to.",
+  "version": "0.0.2",
+  "author": {
+    "name": "Anthony McCormick",
+    "email": "anthony.mccormick AT gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "logger"
+  ],
+  "scripts": {
+    "test": "jasmine JASMINE_CONFIG_PATH=test/config.json --verbose --color --captureExceptions"
+  },
+  "main": "index",
+  "engines": {
+    "node": ">=0.6.19"
+  },
+  "bugs": {
+    "url": "https://github.com/mccormicka/string-argv/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mccormicka/string-argv"
+  },
+  "homepage": "https://github.com/mccormicka/string-argv",
+  "readmeFilename": "README.md",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^2.4.1"
+  }
 }
