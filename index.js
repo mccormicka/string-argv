@@ -1,5 +1,6 @@
 "use strict";
 
+module.exports = parseArgsStringToArgv;
 module.exports.parseArgsStringToArgv = parseArgsStringToArgv;
 
 function parseArgsStringToArgv(value, env, file) {
