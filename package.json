@@ -11,6 +11,7 @@
     "logger"
   ],
   "scripts": {
+    "lint": "eslint .",
     "test": "jasmine JASMINE_CONFIG_PATH=test/config.json --verbose --color --captureExceptions"
   },
   "main": "index",
@@ -28,6 +29,8 @@
   "readmeFilename": "README.md",
   "dependencies": {},
   "devDependencies": {
+    "eslint": "^2.0.0",
+    "eslint-config-cellule": "^3.0.0",
     "jasmine": "^2.4.1"
   }
 }
