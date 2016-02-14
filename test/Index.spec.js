@@ -80,10 +80,32 @@ describe('SHOULD', function () {
             expect(results[2]).toEqual('-valid=true');
             expect(results[3]).toEqual('--quotes');
             expect(results[4]).toEqual('test quotes');
-            console.log(results);
             done();
         });
 
+        it('a complex string with nested quotes', function (done) {
+            var results = util.parseArgsStringToArgv('--title "Peter\'s Friends" --name \'Phil "The Power" Taylor\'');
+            expect(results.length).toBe(4);
+            expect(results[0]).toEqual("--title");
+            expect(results[1]).toEqual("Peter's Friends");
+            expect(results[2]).toEqual("--name");
+            expect(results[3]).toEqual('Phil "The Power" Taylor');
+            done();
+        });
 
+        it('a complex key value with quotes', function (done) {
+            var results = util.parseArgsStringToArgv('--name=\'Phil Taylor\' --title="Peter\'s Friends"');
+            expect(results.length).toBe(2);
+            expect(results[0]).toEqual('--name=\'Phil Taylor\'');
+            expect(results[1]).toEqual('--title="Peter\'s Friends"');
+            done();
+        });
+
+        it('a complex key value with nested quotes', function (done) {
+            var results = util.parseArgsStringToArgv('--name=\'Phil "The Power" Taylor\'');
+            expect(results.length).toBe(1);
+            expect(results[0]).toEqual('--name=\'Phil "The Power" Taylor\'');
+            done();
+        });
     });
 });
