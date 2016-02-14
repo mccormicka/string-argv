@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "test": "jasmine JASMINE_CONFIG_PATH=test/config.json --verbose --color --captureExceptions"
+    "test": "jasmine JASMINE_CONFIG_PATH=test/config.json --verbose --color --captureExceptions && npm run lint"
   },
   "main": "index",
   "engines": {
