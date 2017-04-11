@@ -1,15 +1,15 @@
 
-#What is it?
-string-argv parses a string into an argument array to mimic process.argv.
+# What is it?
+`string-argv` parses a string into an argument array to mimic `process.argv`.
 This is useful when testing Command Line Utilities that you want to pass arguments to and is the opposite of what the other argv utilities do.
 
-#Installation
+# Installation
 
 ```
 npm install string-argv --save
 ```
 
-#Usage
+# Usage
 
 ```js
 var stringArgv = require('string-argv');
@@ -41,7 +41,7 @@ console.log(args);
   **/
 ```
 
-##params
+## params
 
 __required__: __arguments__ String: arguments that you would normally pass to the command line.
 
