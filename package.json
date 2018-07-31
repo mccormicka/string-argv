@@ -1,18 +1,22 @@
 {
   "name": "string-argv",
   "description": "string-argv parses a string into an argument array to mimic process.argv. This is useful when testing Command Line Utilities that you want to pass arguments to.",
-  "version": "0.0.2",
+  "version": "0.1.0",
+  "contributors": [{
+    "name": "Michael Ferris",
+    "email": "mike.ferri@hotmail.com"
+  }],
   "author": {
     "name": "Anthony McCormick",
-    "email": "anthony.mccormick AT gmail.com"
+    "email": "anthony.mccormick@gmail.com"
   },
   "license": "MIT",
   "keywords": [
-    "logger"
+    "argv"
   ],
   "scripts": {
     "lint": "eslint .",
-    "test": "jasmine JASMINE_CONFIG_PATH=test/config.json --verbose --color --captureExceptions && npm run lint"
+    "test": "jasmine --config=test/config.json && npm run lint"
   },
   "main": "index",
   "engines": {
