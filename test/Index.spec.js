@@ -62,6 +62,20 @@ describe("Process ", function() {
     done();
   });
 
+  it("a single value with empty double quotes", function(done) {
+    var results = util.parseArgsStringToArgv('""');
+    expect(results.length).toBe(1);
+    expect(results[0]).toEqual("");
+    done();
+  });
+
+  it("a single value with empty single quotes", function(done) {
+    var results = util.parseArgsStringToArgv("''");
+    expect(results.length).toBe(1);
+    expect(results[0]).toEqual("");
+    done();
+  });
+
   it("a complex string with double quotes", function(done) {
     var results = util.parseArgsStringToArgv('-testing test -valid=true --quotes "test quotes"');
     expect(results.length).toBe(5);
@@ -81,6 +95,28 @@ describe("Process ", function() {
     expect(results[2]).toEqual("-valid=true");
     expect(results[3]).toEqual("--quotes");
     expect(results[4]).toEqual("test quotes");
+    done();
+  });
+
+  it("a complex string with empty double quotes", function(done) {
+    var results = util.parseArgsStringToArgv('-testing test -valid=true --quotes ""');
+    expect(results.length).toBe(5);
+    expect(results[0]).toEqual("-testing");
+    expect(results[1]).toEqual("test");
+    expect(results[2]).toEqual("-valid=true");
+    expect(results[3]).toEqual("--quotes");
+    expect(results[4]).toEqual("");
+    done();
+  });
+
+  it("a complex string with empty single quotes", function(done) {
+    var results = util.parseArgsStringToArgv("-testing test -valid=true --quotes ''");
+    expect(results.length).toBe(5);
+    expect(results[0]).toEqual("-testing");
+    expect(results[1]).toEqual("test");
+    expect(results[2]).toEqual("-valid=true");
+    expect(results[3]).toEqual("--quotes");
+    expect(results[4]).toEqual("");
     done();
   });
 
