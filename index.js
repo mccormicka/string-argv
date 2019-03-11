@@ -27,9 +27,20 @@ function parseArgsStringToArgv(value, env, file) {
     if (match !== null) {
       // Index 1 in the array is the captured group if it exists
       // Index 0 is the matched text, which we use if no captured group exists
-      myArray.push(match[1] || match[5] || match[0]);
+      myArray.push(firstString(match[1], match[5], match[0]));
     }
   } while (match !== null);
 
   return myArray;
+}
+
+// Accepts any number of arguments, and returns the first one that is a string
+// (even an empty string)
+function firstString() {
+  for (var i = 0; i < arguments.length; i++) {
+    var arg = arguments[i];
+    if (typeof arg === "string") {
+      return arg;
+    }
+  }
 }
