@@ -11,10 +11,24 @@ npm install string-argv --save
 
 # Usage
 
+```ts
+// Typescript
+import stringArgv from 'string-argv';
+
+const args = stringArgv(
+  '-testing test -valid=true --quotes "test quotes" "nested \'quotes\'" --key="some value" --title="Peter\'s Friends"',
+  'node',
+  'testing.js'
+);
+
+console.log(args);
+```
+
 ```js
+// Javascript
 var { parseArgsStringToArgv } = require('string-argv');
 
-var args2 = stringArgv.parseArgsStringToArgv(
+var args = parseArgsStringToArgv(
     '-testing test -valid=true --quotes "test quotes" "nested \'quotes\'" --key="some value" --title="Peter\'s Friends"',
     'node',
     'testing.js'
