@@ -12,14 +12,8 @@ npm install string-argv --save
 # Usage
 
 ```js
-var stringArgv = require('string-argv');
-var args = stringArgv(
-    '-testing test -valid=true --quotes "test quotes" "nested \'quotes\'" --key="some value" --title="Peter\'s Friends"',
-    'node',
-    'testing.js'
-);
+var { parseArgsStringToArgv } = require('string-argv');
 
-//legacy
 var args2 = stringArgv.parseArgsStringToArgv(
     '-testing test -valid=true --quotes "test quotes" "nested \'quotes\'" --key="some value" --title="Peter\'s Friends"',
     'node',
