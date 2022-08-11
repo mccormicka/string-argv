@@ -1,5 +1,7 @@
 
-export { parseArgsStringToArgv as default, parseArgsStringToArgv };
+export default parseArgsStringToArgv;
+export { parseArgsStringToArgv };
+
 function parseArgsStringToArgv(
   value: string,
   env?: string,
