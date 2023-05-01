@@ -1,7 +1,7 @@
 {
   "name": "string-argv",
   "description": "string-argv parses a string into an argument array to mimic process.argv. This is useful when testing Command Line Utilities that you want to pass arguments to.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "contributors": [
     {
       "name": "Michael Ferris",
