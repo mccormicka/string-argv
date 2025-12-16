@@ -29,7 +29,7 @@ describe("Process ", function () {
       parseAndValidate(
         value.replace(/"/g, "'"),
         expectedWithSingleQuotes,
-        false
+        false,
       );
     }
   }
@@ -77,7 +77,7 @@ describe("Process ", function () {
     parseAndValidate(
       '-testing test -valid=true --quotes "test quotes"',
       ["-testing", "test", "-valid=true", "--quotes", "test quotes"],
-      true
+      true,
     );
     done();
   });
@@ -86,7 +86,7 @@ describe("Process ", function () {
     parseAndValidate(
       '-testing test -valid=true --quotes ""',
       ["-testing", "test", "-valid=true", "--quotes", ""],
-      true
+      true,
     );
     done();
   });
@@ -94,22 +94,22 @@ describe("Process ", function () {
   it("a complex string with nested quotes", function (done) {
     parseAndValidate(
       '--title "Peter\'s Friends" --name \'Phil "The Power" Taylor\'',
-      ["--title", "Peter's Friends", "--name", 'Phil "The Power" Taylor']
+      ["--title", "Peter's Friends", "--name", 'Phil "The Power" Taylor'],
     );
     done();
   });
 
   it("a complex key value with quotes", function (done) {
     parseAndValidate("--name='Phil Taylor' --title=\"Peter's Friends\"", [
-      "--name='Phil Taylor'",
-      '--title="Peter\'s Friends"',
+      "--name=Phil Taylor",
+      "--title=Peter's Friends",
     ]);
     done();
   });
 
   it("a complex key value with nested quotes", function (done) {
     parseAndValidate("--name='Phil \"The Power\" Taylor'", [
-      "--name='Phil \"The Power\" Taylor'",
+      '--name=Phil "The Power" Taylor',
     ]);
     done();
   });
@@ -117,8 +117,8 @@ describe("Process ", function () {
   it("nested quotes with no spaces", function (done) {
     parseAndValidate(
       'jake run:silent["echo 1"] --trace',
-      ["jake", 'run:silent["echo 1"]', "--trace"],
-      true
+      ["jake", "run:silent[echo 1]", "--trace"],
+      true,
     );
     done();
   });
@@ -126,17 +126,27 @@ describe("Process ", function () {
   it("multiple nested quotes with no spaces", function (done) {
     parseAndValidate(
       'jake run:silent["echo 1"]["echo 2"] --trace',
-      ["jake", 'run:silent["echo 1"]["echo 2"]', "--trace"],
-      true
+      ["jake", "run:silent[echo 1][echo 2]", "--trace"],
+      true,
     );
     done();
   });
 
   it("complex multiple nested quotes", function (done) {
-    parseAndValidate('cli value("echo")[\'grep\']+"Peter\'s Friends"', [
+    parseAndValidate('cli value["echo"][\'grep\']+"Peter\'s Friends"', [
       "cli",
-      'value("echo")[\'grep\']+"Peter\'s Friends"',
+      "value[echo][grep]+Peter's Friends",
     ]);
+    done();
+  });
+
+  it("combined quotation segments", function (done) {
+    parseAndValidate("--foo=\"bar\"'baz'", ["--foo=barbaz"]);
+    done();
+  });
+
+  it("unquoted text followed by quoted text with space", function (done) {
+    parseAndValidate('a" b"', ["a b"]);
     done();
   });
 });
