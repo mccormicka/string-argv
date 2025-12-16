@@ -43,6 +43,11 @@ describe("Process ", function () {
     done();
   });
 
+  it("an empty string should return an empty array", function (done) {
+    parseAndValidate("", []);
+    done();
+  });
+
   it("an arguments array correctly without file and env", function (done) {
     parseAndValidate("-test", ["-test"]);
     done();
