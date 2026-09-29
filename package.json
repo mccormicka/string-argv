@@ -19,7 +19,8 @@
   "scripts": {
     "build": "tsc -p .",
     "prepublishOnly": "npm test",
-    "test": "npm run build & jasmine --config=test/config.json"
+    "test": "npm run build & jasmine --config=test/config.json",
+    "test:no-build": "jasmine --config=test/config.json"
   },
   "type": "module",
   "exports": {
