@@ -17,7 +17,7 @@
     "argv"
   ],
   "scripts": {
-    "build": "tsc -p . & tsc -p tsconfig.commonjs.json",
+    "build": "tsc -p .",
     "prepublishOnly": "npm test",
     "test": "npm run build & jasmine --config=test/config.json"
   },
@@ -25,15 +25,13 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./commonjs/index.js"
+      "import": "./index.js"
     }
   },
-  "main": "./commonjs/index.js",
-  "module": "./index.js",
+  "main": "./index.js",
   "types": "index.d.ts",
   "engines": {
-    "node": ">=0.6.19"
+    "node": ">=16.20.0"
   },
   "bugs": {
     "url": "https://github.com/mccormicka/string-argv/issues"
@@ -46,6 +44,6 @@
   "readmeFilename": "README.md",
   "devDependencies": {
     "jasmine": "^4.4.0",
-    "typescript": "^5.0.4"
+    "typescript": "^7.0.2"
   }
 }

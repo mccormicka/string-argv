@@ -9,6 +9,19 @@ This is useful when testing Command Line Utilities that you want to pass argumen
 npm install string-argv --save
 ```
 
+# Requirements
+
+Requires Node.js `>=16.20.0`.
+
+This package is ESM-only (`"type": "module"`). Use `import`, not `require()`:
+
+```js
+import stringArgv from 'string-argv';
+```
+
+TypeScript 7 requires Node.js >=16.20, and the single ESM build targets
+ES2022, so 16.20.0 is the minimum supported version.
+
 # Usage
 
 ```ts
@@ -25,8 +38,8 @@ console.log(args);
 ```
 
 ```js
-// Javascript
-var { parseArgsStringToArgv } = require('string-argv');
+// Javascript (ESM)
+import { parseArgsStringToArgv } from 'string-argv';
 
 var args = parseArgsStringToArgv(
     '-testing test -valid=true --quotes "test quotes" "nested \'quotes\'" --key="some value" --title="Peter\'s Friends"',

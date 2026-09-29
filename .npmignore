@@ -5,5 +5,3 @@ test/
 *.ts
 !*.d.ts
 tsconfig.json
-tsconfig.base.json
-tsconfig.commonjs.json

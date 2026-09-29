@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "target": "es3",
-    "module": "commonjs",
-    "outDir": "./commonjs",
-    "declaration": false
-  }
-}
