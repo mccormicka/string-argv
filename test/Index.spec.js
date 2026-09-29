@@ -29,7 +29,7 @@ describe("Process ", function () {
       parseAndValidate(
         value.replace(/"/g, "'"),
         expectedWithSingleQuotes,
-        false
+        false,
       );
     }
   }
@@ -40,6 +40,11 @@ describe("Process ", function () {
     expect(results[0]).toEqual("node");
     expect(results[1]).toEqual("testing.js");
     expect(results[2]).toEqual("-test");
+    done();
+  });
+
+  it("an empty string should return an empty array", function (done) {
+    parseAndValidate("", []);
     done();
   });
 
@@ -77,7 +82,7 @@ describe("Process ", function () {
     parseAndValidate(
       '-testing test -valid=true --quotes "test quotes"',
       ["-testing", "test", "-valid=true", "--quotes", "test quotes"],
-      true
+      true,
     );
     done();
   });
@@ -86,7 +91,7 @@ describe("Process ", function () {
     parseAndValidate(
       '-testing test -valid=true --quotes ""',
       ["-testing", "test", "-valid=true", "--quotes", ""],
-      true
+      true,
     );
     done();
   });
@@ -94,22 +99,22 @@ describe("Process ", function () {
   it("a complex string with nested quotes", function (done) {
     parseAndValidate(
       '--title "Peter\'s Friends" --name \'Phil "The Power" Taylor\'',
-      ["--title", "Peter's Friends", "--name", 'Phil "The Power" Taylor']
+      ["--title", "Peter's Friends", "--name", 'Phil "The Power" Taylor'],
     );
     done();
   });
 
   it("a complex key value with quotes", function (done) {
     parseAndValidate("--name='Phil Taylor' --title=\"Peter's Friends\"", [
-      "--name='Phil Taylor'",
-      '--title="Peter\'s Friends"',
+      "--name=Phil Taylor",
+      "--title=Peter's Friends",
     ]);
     done();
   });
 
   it("a complex key value with nested quotes", function (done) {
     parseAndValidate("--name='Phil \"The Power\" Taylor'", [
-      "--name='Phil \"The Power\" Taylor'",
+      '--name=Phil "The Power" Taylor',
     ]);
     done();
   });
@@ -117,8 +122,8 @@ describe("Process ", function () {
   it("nested quotes with no spaces", function (done) {
     parseAndValidate(
       'jake run:silent["echo 1"] --trace',
-      ["jake", 'run:silent["echo 1"]', "--trace"],
-      true
+      ["jake", "run:silent[echo 1]", "--trace"],
+      true,
     );
     done();
   });
@@ -126,17 +131,99 @@ describe("Process ", function () {
   it("multiple nested quotes with no spaces", function (done) {
     parseAndValidate(
       'jake run:silent["echo 1"]["echo 2"] --trace',
-      ["jake", 'run:silent["echo 1"]["echo 2"]', "--trace"],
-      true
+      ["jake", "run:silent[echo 1][echo 2]", "--trace"],
+      true,
     );
     done();
   });
 
   it("complex multiple nested quotes", function (done) {
-    parseAndValidate('cli value("echo")[\'grep\']+"Peter\'s Friends"', [
+    parseAndValidate('cli value["echo"][\'grep\']+"Peter\'s Friends"', [
       "cli",
-      'value("echo")[\'grep\']+"Peter\'s Friends"',
+      "value[echo][grep]+Peter's Friends",
     ]);
     done();
+  });
+
+  it("combined quotation segments", function (done) {
+    parseAndValidate("--foo=\"bar\"'baz'", ["--foo=barbaz"]);
+    done();
+  });
+
+  it("unquoted text followed by quoted text with space", function (done) {
+    parseAndValidate('a" b"', ["a b"]);
+    done();
+  });
+
+  describe("bash-compatible combined quotations (PR #24 follow-up)", function () {
+    it("quoted text directly followed by unquoted text (issue #23)", function (done) {
+      parseAndValidate('"a"b', ["ab"], true);
+      done();
+    });
+
+    it("quoted text with an unquoted prefix and suffix", function (done) {
+      parseAndValidate('-"a"b', ["-ab"]);
+      done();
+    });
+
+    it("empty quotes before unquoted text", function (done) {
+      parseAndValidate('""foo', ["foo"], true);
+      done();
+    });
+
+    it("empty quotes after unquoted text", function (done) {
+      parseAndValidate('foo""', ["foo"], true);
+      done();
+    });
+
+    it("empty quotes inside unquoted text", function (done) {
+      parseAndValidate('foo""bar', ["foobar"], true);
+      done();
+    });
+
+    it("adjacent single- and double-quoted segments", function (done) {
+      parseAndValidate('\'a\'"b"', ["ab"]);
+      done();
+    });
+
+    it("multiple adjacent quoted segments plus unquoted text", function (done) {
+      parseAndValidate('"a"\'b\'c', ["abc"]);
+      done();
+    });
+
+    it("a key=value pair with a quoted value containing a space", function (done) {
+      parseAndValidate('--key="some value"', ["--key=some value"], true);
+      done();
+    });
+
+    it("complex nested quotes with parentheses", function (done) {
+      parseAndValidate('cli value("echo")[\'grep\']+"Peter\'s Friends"', [
+        "cli",
+        "value(echo)[grep]+Peter's Friends",
+      ]);
+      done();
+    });
+
+    it("leading, trailing and repeated whitespace", function (done) {
+      parseAndValidate("  a   b  ", ["a", "b"]);
+      done();
+    });
+
+    it("tab-separated arguments", function (done) {
+      parseAndValidate("a\tb", ["a", "b"]);
+      done();
+    });
+
+    it("multiple empty quoted arguments", function (done) {
+      parseAndValidate('"" ""', ["", ""], true);
+      done();
+    });
+
+    xit("TODO: backslash escapes like bash", function (done) {
+      // Bash: `a\ b` is a single argument `a b`. The parser currently keeps
+      // the backslash and splits: ["a\\", "b"]. Pending escape handling.
+      parseAndValidate("a\\ b", ["a b"]);
+      done();
+    });
   });
 });

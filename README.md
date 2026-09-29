@@ -44,8 +44,8 @@ console.log(args);
   '--quotes',
   'test quotes',
   'nested \'quotes\'',
-  '--key="some value"',
-  '--title="Peter\'s Friends"' ]
+  '--key=some value',
+  '--title=Peter\'s Friends' ]
   **/
 ```
 
@@ -56,3 +56,28 @@ __required__: __arguments__ String: arguments that you would normally pass to th
 __optional__: __environment__ String: Adds to the environment position in the argv array. If ommitted then there is no need to call argv.split(2) to remove the environment/file values. However if your cli.parse method expects a valid argv value then you should include this value.
 
 __optional__: __file__ String: file that called the arguments. If omitted then there is no need to call argv.split(2) to remove the environment/file values. However if your cli.parse method expects a valid argv value then you should include this value.
+
+## Parsing behavior (bash-compatible quoting)
+
+Quoting follows bash word-splitting rules: `'` and `"` group text into a single
+argument, adjacent quoted and unquoted segments are concatenated, and the quote
+characters themselves are removed. Whitespace separates arguments only when it
+appears outside of quotes.
+
+```
+--foo="bar"'baz'                    -> [--foo=barbaz]
+a" b"                                -> [a b]
+"a"b                                 -> [ab]
+jake run:silent["echo 1"]["echo 2"]  -> [jake, run:silent[echo 1][echo 2], --trace]
+--name='Phil Taylor'                 -> [--name=Phil Taylor]
+--title="Peter's Friends"            -> [--title=Peter's Friends]
+```
+
+A quote of the opposite kind inside quotes is kept literally
+(`--name='Phil "The Power" Taylor'` -> `--name=Phil "The Power" Taylor`),
+and empty quotes produce an empty argument (`""` -> `[""]`).
+
+Known differences from bash:
+- backslash escapes are not processed
+- `$variables`, globs and other expansions are left literal
+- an unclosed quote consumes the rest of the input instead of raising a syntax error

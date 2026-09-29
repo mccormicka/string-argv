@@ -4,14 +4,6 @@ export default function parseArgsStringToArgv(
   env?: string,
   file?: string
 ): string[] {
-  // ([^\s'"]([^\s'"]*(['"])([^\3]*?)\3)+[^\s'"]*) Matches nested quotes until the first space outside of quotes
-
-  // [^\s'"]+ or Match if not a space ' or "
-
-  // (['"])([^\5]*?)\5 or Match "quoted text" without quotes
-  // `\3` and `\5` are a backreference to the quote style (' or ") captured
-  const myRegexp = /([^\s'"]([^\s'"]*(['"])([^\3]*?)\3)+[^\s'"]*)|[^\s'"]+|(['"])([^\5]*?)\5/gi;
-  const myString = value;
   const myArray: string[] = [];
   if (env) {
     myArray.push(env);
@@ -19,27 +11,50 @@ export default function parseArgsStringToArgv(
   if (file) {
     myArray.push(file);
   }
-  let match: RegExpExecArray | null;
-  do {
-        // Each call to exec returns the next regex match as an array
-    match = myRegexp.exec(myString);
-    if (match !== null) {
-      // Index 1 in the array is the captured group if it exists
-      // Index 0 is the matched text, which we use if no captured group exists
-      myArray.push(firstString(match[1], match[6], match[0])!);
+
+  let current = "";
+  let inQuote: string | null = null;
+  let hasToken = false; // Track if we've started a token (for empty quotes)
+  let i = 0;
+
+  while (i < value.length) {
+    const char = value[i];
+
+    if (inQuote) {
+      // Inside quotes - look for the closing quote
+      if (char === inQuote) {
+        // End of quoted section
+        inQuote = null;
+      } else {
+        // Add character to current token (without the quotes)
+        current += char;
+      }
+    } else {
+      // Outside quotes
+      if (char === '"' || char === "'") {
+        // Start of quoted section - this means we have a token even if empty
+        inQuote = char;
+        hasToken = true;
+      } else if (/\s/.test(char)) {
+        // Whitespace - end current token if we have one
+        if (hasToken) {
+          myArray.push(current);
+          current = "";
+          hasToken = false;
+        }
+      } else {
+        // Regular character - add to current token
+        current += char;
+        hasToken = true;
+      }
     }
-  } while (match !== null);
+    i++;
+  }
+
+  // Don't forget the last token
+  if (hasToken) {
+    myArray.push(current);
+  }
 
   return myArray;
-}
-
-// Accepts any number of arguments, and returns the first one that is a string
-// (even an empty string)
-function firstString(...args: Array<any>): string | undefined {
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (typeof arg === "string") {
-      return arg;
-    }
-  }
 }
