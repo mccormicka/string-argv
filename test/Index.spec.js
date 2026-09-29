@@ -154,4 +154,76 @@ describe("Process ", function () {
     parseAndValidate('a" b"', ["a b"]);
     done();
   });
+
+  describe("bash-compatible combined quotations (PR #24 follow-up)", function () {
+    it("quoted text directly followed by unquoted text (issue #23)", function (done) {
+      parseAndValidate('"a"b', ["ab"], true);
+      done();
+    });
+
+    it("quoted text with an unquoted prefix and suffix", function (done) {
+      parseAndValidate('-"a"b', ["-ab"]);
+      done();
+    });
+
+    it("empty quotes before unquoted text", function (done) {
+      parseAndValidate('""foo', ["foo"], true);
+      done();
+    });
+
+    it("empty quotes after unquoted text", function (done) {
+      parseAndValidate('foo""', ["foo"], true);
+      done();
+    });
+
+    it("empty quotes inside unquoted text", function (done) {
+      parseAndValidate('foo""bar', ["foobar"], true);
+      done();
+    });
+
+    it("adjacent single- and double-quoted segments", function (done) {
+      parseAndValidate('\'a\'"b"', ["ab"]);
+      done();
+    });
+
+    it("multiple adjacent quoted segments plus unquoted text", function (done) {
+      parseAndValidate('"a"\'b\'c', ["abc"]);
+      done();
+    });
+
+    it("a key=value pair with a quoted value containing a space", function (done) {
+      parseAndValidate('--key="some value"', ["--key=some value"], true);
+      done();
+    });
+
+    it("complex nested quotes with parentheses", function (done) {
+      parseAndValidate('cli value("echo")[\'grep\']+"Peter\'s Friends"', [
+        "cli",
+        "value(echo)[grep]+Peter's Friends",
+      ]);
+      done();
+    });
+
+    it("leading, trailing and repeated whitespace", function (done) {
+      parseAndValidate("  a   b  ", ["a", "b"]);
+      done();
+    });
+
+    it("tab-separated arguments", function (done) {
+      parseAndValidate("a\tb", ["a", "b"]);
+      done();
+    });
+
+    it("multiple empty quoted arguments", function (done) {
+      parseAndValidate('"" ""', ["", ""], true);
+      done();
+    });
+
+    xit("TODO: backslash escapes like bash", function (done) {
+      // Bash: `a\ b` is a single argument `a b`. The parser currently keeps
+      // the backslash and splits: ["a\\", "b"]. Pending escape handling.
+      parseAndValidate("a\\ b", ["a b"]);
+      done();
+    });
+  });
 });
